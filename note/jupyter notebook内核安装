@@ -1,0 +1,30 @@
+##**virtualenv + jupyter notebook**
+---
+####主要步骤：
+
+1) 进入虚拟环境
+~~~
+workon 虚拟环境名称
+~~~
+
+2)安装 IPykernel(即ipython解释内核)
+< python2 >
+~~~
+pip install ipykernel
+~~~
+< python3 >
+~~~
+pip3 install ipykernel
+~~~
+
+3)将 Virtualenv 加入IPykernel
+< python2 >
+~~~
+python2 -m ipykernel install --user --name=myproject
+~~~
+< python3 >
+~~~
+python3 -m ipykernel install --user --name=myproject
+~~~
+
+4)启动jupyter notebook并更改kernel

@@ -1,0 +1,146 @@
+# python下关于读取照片的库
+
+###一 OpenCV: cv2.imread
+OpenCV可以说是最强大的读取照片的函数库
+
+---
+
+####**图片读取操作**
+~~~
+import cv2
+import numpy as np
+
+#读入图片：默认彩色图，cv2.IMREAD_GRAYSCALE灰度图，cv2.IMREAD_UNCHANGED包含alpha通道
+img = cv2.imread('1.jpg')
+cv2.imshow('src',img)
+print(img.shape) # (h,w,c)
+print(img.size) # 像素总数目
+print(img.dtype)
+print(img)
+cv2.waitKey()
+~~~
+==**cv.imread()参数说明**==
+
+| 第一个参数:指明图片的地址.图像应位于文件中,或者提供图片==完整路径==
+
+| 第二个参数：是一个标志，指明读取图像的方式
+~~~
+cv2.IMREAD_COLOR:　默认,加载彩色图像,任何图像的透明度都将被忽略
+cv2.IMERAD_GRAYSCALE: 以灰度模式加载图像
+cv2.IMREAD_UNCHANGED:  加载图像，包括alpha通道
+~~~
+ 可以使用1 , 0 , -1来代替
+ 例：
+~~~
+import cv2
+import numpy as np
+
+img = cv2.imread('1.png')
+~~~
+==注意:==路径错误，不会报错，只会打印路径none
+
+值得注意的是，opencv读进来的图片已经是一个numpy矩阵了，彩色图片维度是（高度，宽度，通道数）, 数据类型是uint8。
+
+---
+
+####  **图片显示**
+
+ ==**cv2.imshow（）**==
+ 使用函数cv2.imshow（）在窗口中显示图像。窗口自动适合图像大小。
+~~~
+第一个参数是一个窗口名称，它是一个字符串。
+第二个论点是我们的形象。
+~~~
+可以根据需要创建任意数量的窗口，但使用不同的窗口名称。
+
+==**cv2.waitKey()**==
+cv2.waitKey（）是一个键盘绑定函数。
+它的参数是以毫秒为单位的时间。该函数等待任何键盘事件的指定毫秒。
+如果在该时间内按任意键，程序将继续。如果为0，则无限期等待键击。
+它也可以设置为检测特定的键击，如果按下键a等. 下文有讲解
+~~~
+注意 除了绑定键盘事件，此函数还处理许多其他GUI事件，因此必须使用它来实际显示图像。
+~~~
+
+==**cv2.destroyAllWindows()**==
+cv2.destroyAllWindows()为窗口破坏函数，如果要销毁窗口，使用该函数．
+参数为:窗口名称
+
+==**cv2.namedWindow()**==
+cv2.namedWindow():创建窗口
+函数有两个参数
+
+~~~
+第一个参数为窗口名称，
+第二个参数描述窗口是否可以调整大小
+|cv2.WINDOW_AUTOSIZ,默认参数，窗口为自动设置，且无法调整大小
+|cv2.WINDOW_NORMAL，则可以调整窗口大小
+~~~
+例
+~~~
+import cv2
+import numpy as np
+
+img = cv2.imread('1.png')
+cv2.namedWindow('src' , cv2.WINDOW_NORMAL) #可调整窗口大小
+cv2.imshow('src' , img)
+print(img.size)#输出图片大小
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+~~~
+
+---
+#### **照片写入**
+==**cv2.imwrite()**==
+cv2.imwrite():来保存图像，有两个参数
+~~~
+第一个参数是文件名，第二个参数是要保存的图像。
+~~~
+例
+~~~
+import cv2
+import numpy as np
+
+img = cv2.imread('1.png', 1)
+
+cv2.namedWindow('src' , cv2.WINDOW_NORMAL)
+cv2.imshow('src' , img)
+cv2.waitKey(0)
+
+cv2.imwrite('1_2.png', img)# 保存
+
+img2 = cv2.imread('1_2.png' , 0)
+cv2.imshow('src' , img2)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+~~~
+
+---
+
+案例：
+程序下方加载灰度图像，显示图像，如果按“s”并退出则保存图像，或者按ESC键直接退出而不保存。
+~~~
+import cv2
+
+img = cv2.imread('1.png', 1)
+cv2.imshow('src' , img)
+k = cv2.waitKey(0) & 0xFF # 64位电脑需要这么写．
+if k == 27:         # wait for ESC key to exit
+    cv2.destroyAllWindows()
+elif k == ord('s'): # wait for 's' key to save and exit
+    cv2.imwrite('messigray.png',img)
+    cv2.destroyAllWindows()
+else: # other key 
+    print("ok")
+
+~~~
+
+==**注**==
+k = cv2.waitKey(0) & 0xFF
+0x代表16进制,0xFF的二进制为1111 1111,猜测是Python中程序运行时cv2.waitKey(0) 返回值大于8位,因此& 0xFF取低8位,对应ascall表
+参考:
+https://blog.csdn.net/lvgaoyanh/article/details/53486933
+https://blog.csdn.net/hya123456hya/article/details/73332017
+https://blog.csdn.net/weixin_42480593/article/details/82751180
+https://blog.csdn.net/hezh1994/article/details/78899683

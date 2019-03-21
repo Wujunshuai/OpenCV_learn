@@ -1,0 +1,6 @@
+digits.py
+digits_adjust.py
+digits_video.py
+#手写字体的识别，扫描识别，
+#思路猜测：视频转化为黑白，设置阈值，截取，识别。
+#数据集的训练，
